@@ -15,8 +15,15 @@ cross_join = \(x, ...) {
 
 #' @export
 `%/%` = \(x, expr) x[grepl(x, expr, perl=TRUE)]
+
+#' @export
 `%~%` = \(x, expr) grepl(x, expr, perl=TRUE)
+
+
+#' @export
+#' @import data.table
 `%s%` = \(datatable, group_expression) {
+  if (!data.table::is.data.table(datatable)) stop('datatable must be data.table')
   captured_expression = substitute(datatable[, .N, group_expression])
   eval(captured_expression, parent.frame())
 }
