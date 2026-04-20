@@ -12,3 +12,13 @@ cross_join = \(x, ...) {
   y[, TEMPORARY.BY := 1]
   merge(x,y, by='TEMPORARY.BY', allow.cartesian = TRUE)[, -'TEMPORARY.BY']
 }
+
+#' @export
+`%/%` = \(x, expr) x[grepl(x, expr, perl=TRUE)]
+`%~%` = \(x, expr) grepl(x, expr, perl=TRUE)
+`%s%` = \(datatable, group_expression) {
+  captured_expression = substitute(datatable[, .N, group_expression])
+  eval(captured_expression, parent.frame())
+}
+
+
