@@ -14,11 +14,19 @@ cross_join = \(x, ...) {
 }
 
 #' @export
-`%/%` = \(x, expr) x[grepl(x, expr, perl=TRUE)]
+`%[%` = \(x, expr) {
+  if (is.vector(x) == TRUE) {
+    return(x[grepl(expr, x, perl=TRUE)])
+  }
+  else if (is.data.frame(x) == TRUE) {
+    rows = x |> apply(1, paste, collapse='|')
+    rows_that_match = grepl(expr, rows, perl=TRUE)
+    return(x[rows_that_match, ])
+  }
+}
 
 #' @export
-`%~%` = \(x, expr) grepl(x, expr, perl=TRUE)
-
+`%~%` = \(x, expr) grepl(expr, x, perl=TRUE)
 
 #' @export
 #' @import data.table
